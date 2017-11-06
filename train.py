@@ -1,6 +1,6 @@
 
 import numpy
-
+import os
 import matplotlib.pyplot as plt
 
 from keras.layers import Dropout
@@ -52,6 +52,8 @@ sgd = SGD(lr=lrate, momentum=0.9, decay=decay, nesterov=False)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 print(model.summary())
 #callbacks=[keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=0, verbose=0, mode='auto')]
+if not os.path.exists("./logs"):
+    os.mkdir("./logs")
 callbacks=[keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=0, batch_size=32, write_graph=True, write_grads=False, write_images=True, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)]
 # Fit the model
 model.fit(X_train, y_train, epochs=epochs, batch_size=32,shuffle=True,callbacks=callbacks)
@@ -62,6 +64,10 @@ print("Accuracy: %.2f%%" % (scores[1]*100))
 
 # serialize model to JSONx
 model_json = model.to_json()
+if not os.path.exists("./model"):
+    os.mkdir("./model")
+if not os.path.exists("./predict"):
+    os.mkdir("./predict")
 with open("model/model_face.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5

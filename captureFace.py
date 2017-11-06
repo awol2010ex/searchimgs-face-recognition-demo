@@ -12,8 +12,8 @@ import urllib.error
 # 设置超时
 import time
 import dlib
-from skimage import io,util
-
+from skimage import io
+from optparse import OptionParser
 
 detector = dlib.get_frontal_face_detector()
 
@@ -39,7 +39,7 @@ class Crawler:
         if not os.path.exists("./tmp"):
             os.mkdir("./tmp")
         if not os.path.exists("./face"):
-            os.mkdir("./face")  			
+            os.mkdir("./face")
         if not os.path.exists("./tmp/" + word):
             os.mkdir("./tmp/" + word)
         if not os.path.exists("./face/" + word):
@@ -48,13 +48,14 @@ class Crawler:
         self.__counter = len(os.listdir('./tmp/' + word)) + 1
         for image_info in rsp_data['imgs']:
             try:
+                #B度下载图片
                 time.sleep(self.time_sleep)
                 fix = self.__get_suffix(image_info['objURL'])
                 c=str(self.__counter)
                 pathtmp = './tmp/' + word + '/' + c + str(fix)
                 pathface = './face/' + word + '/' + c + str(fix)
                 urllib.request.urlretrieve(image_info['objURL'], pathtmp)
-
+                #抓取头像
                 try:
                      img =io.imread(pathtmp)
                      dects = detector(img, 1)
@@ -78,7 +79,7 @@ class Crawler:
                 print("产生未知错误，放弃保存")
                 continue
             else:
-                print("小黄图+1,已有" + str(self.__counter) + "张小黄图")
+                print("图片+1,已有" + str(self.__counter) + "张图片")
                 self.__counter += 1
         return
 
@@ -97,7 +98,7 @@ class Crawler:
         return name[:name.find('.')]
 
     # 开始获取
-    def __get_images(self, word='美女'):
+    def __get_images(self, word=''):
         search = urllib.parse.quote(word)
         # pn int 图片数
         pn = self.__start_amount
@@ -150,4 +151,9 @@ if __name__ == '__main__':
     # crawler.start('美女', 1, 2)
     #crawler.start('二次元 美女', 3, 3)
     # crawler.start('帅哥', 5)
-    crawler.start('户田惠梨香', 3, 3)
+    #crawler.start('户田惠梨香', 3, 3)
+    parser=OptionParser(usage='%prog [options]')
+    parser.add_option('-n','--name',dest='name',help='face name')
+    (options,args)=parser.parse_args()
+    name=options.name
+    crawler.start(name, 3, 3)

@@ -22,17 +22,19 @@ loaded_model.load_weights("model/model_face.h5")
 print("Model is now loaded in the disk")
 
 
-img=os.listdir("predict")[0]
-image=np.array(misc.imread("predict/"+img))
-image = misc.imresize(image, (64, 64))
-image=np.array([image])
-image = image.astype('float32')
-image = image / 255.0
+imgs=os.listdir("predict")
+for img  in imgs:
+    image=np.array(misc.imread("predict/"+img))
+    image = misc.imresize(image, (64, 64))
+    image=np.array([image])
+    image = image.astype('float32')
+    image = image / 255.0
 
-prediction=loaded_model.predict(image)
+    prediction=loaded_model.predict(image)
+    print(img +"-----------------")
+    print(prediction)
 
-print(prediction)
+    print(np.max(prediction))
 
-print(np.max(prediction))
-
-print(int_to_word_out[np.argmax(prediction)])
+    print(int_to_word_out[np.argmax(prediction)])
+    print("-----------------")

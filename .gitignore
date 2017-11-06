@@ -5,3 +5,4 @@ pickle
 logs
 model
 predict
+__pycache__
