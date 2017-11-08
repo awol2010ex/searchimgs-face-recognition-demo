@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
 import numpy as np
 import os
 from scipy import  misc
@@ -23,18 +25,19 @@ print("Model is now loaded in the disk")
 
 
 imgs=os.listdir("predict")
-for img  in imgs:
-    image=np.array(misc.imread("predict/"+img))
-    image = misc.imresize(image, (64, 64))
-    image=np.array([image])
-    image = image.astype('float32')
-    image = image / 255.0
+if len(imgs)>0 :
+    for img  in imgs:
+        image=np.array(misc.imread("predict/"+img))
+        image = misc.imresize(image, (64, 64))
+        image=np.array([image])
+        image = image.astype('float32')
+        image = image / 255.0
 
-    prediction=loaded_model.predict(image)
-    print(img +"-----------------")
-    print(prediction)
+        prediction=loaded_model.predict(image)
+        print(img +"-----------------")
+        print(prediction)
 
-    print(np.max(prediction))
+        print(np.max(prediction))
 
-    print(int_to_word_out[np.argmax(prediction)])
-    print("-----------------")
+        print(int_to_word_out[np.argmax(prediction)])
+        print("-----------------")
