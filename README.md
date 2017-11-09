@@ -62,3 +62,5 @@ Model is now loaded in the disk
 凯特·布兰切特
 -----------------
 ```
+6.导出为tensorflow 二进制模型
+python save_to_tensorflow.py

@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 from keras.layers import Dropout
 from keras.layers import Flatten
 from keras.constraints import maxnorm
-from keras.optimizers import SGD
+#from keras.optimizers import SGD
+from keras.optimizers import Adam
 from keras.layers import Conv2D
 
 from keras.layers.convolutional import MaxPooling2D
@@ -46,11 +47,16 @@ model.add(Dense(512, activation='relu', kernel_constraint=maxnorm(3)))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 # Compile model
-epochs = 10
+epochs = 20
 lrate = 0.01
 decay = lrate/epochs
-sgd = SGD(lr=lrate, momentum=0.9, decay=decay, nesterov=False)
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+#sgd = SGD(lr=lrate, momentum=0.9, decay=decay, nesterov=False)
+#model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+
+op = Adam(lr=0.001,beta_1=0.9,beta_2=0.999,epsilon=1e-8)
+model.compile(loss='categorical_crossentropy', optimizer=op, metrics=['accuracy'])
+
+
 print(model.summary())
 #callbacks=[keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=0, verbose=0, mode='auto')]
 if not os.path.exists("./logs"):
